@@ -4,11 +4,11 @@ from sequel import *
 from io import BytesIO
 from PIL import Image
 import numpy as np
-import yolov5 as yl
+import torch
 
 
 # st.set_page_config(page_title='Home') #ignore this
-model = yl.load('./models/best.pt')
+model = torch.hub.load('ultralytics/yolov5','custom','./models/best/.pt')
 
 def convert_cv2(df):  # function to convert dataframe into a csv
     return df.to_csv().encode('utf-8')
