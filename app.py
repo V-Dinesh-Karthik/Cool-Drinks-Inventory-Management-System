@@ -5,11 +5,13 @@ from io import BytesIO
 from PIL import Image
 import numpy as np
 import yolov5 as yl
+import torch
 
 
 # st.set_page_config(page_title='Home') #ignore this
 # model = torch.hub.load('ultralytics/yolov5','custom','./models/best.pt')
 model = yl.load("./models/best.pt")
+
 
 def convert_cv2(df):  # function to convert dataframe into a csv
     return df.to_csv().encode("utf-8")
@@ -21,14 +23,14 @@ def convert_xcel(df):  # fuction to convert a dataframe into an excel file
         df.to_excel(writer)
     return output
 
+
 def read_df(data):
     d = {}
     for key in data:
-        d[key] = d.get(key,0)+1
-    df = pd.DataFrame(d.items(),columns=["Name","Count"])
+        d[key] = d.get(key, 0) + 1
+    df = pd.DataFrame(d.items(), columns=["Name", "Count"])
     return df
 
-    
 
 # rtc configuration !
 RTC_CONFIGURATION = RTCConfiguration(
@@ -99,7 +101,7 @@ if option == "Staff":
     if media == "🖼️Image":
         image = st.sidebar.file_uploader("Upload an Image", type=["jpg", "png", "jpeg"])
 
-        orig_image,out_image = st.columns(2)
+        orig_image, out_image = st.columns(2)
 
         if image is not None:
             image = Image.open(image)
@@ -117,17 +119,17 @@ if option == "Staff":
             if st.button("Detect"):
                 results = model(image)
 
-                results.save(save_dir="./Output/")
+                results.save(save_dir="./Output")
 
                 counted = results.pandas().xyxy[0]
                 dd = counted["name"].tolist()
 
                 dd = read_df(dd)
 
-                dd.set_index("Name",inplace=True)
+                dd.set_index("Name", inplace=True)
 
                 with out_image:
                     st.image("./Output/image0.jpg")
-                    
+
                 st.sidebar.subheader("Detected!")
                 st.sidebar.table(dd)

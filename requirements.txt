@@ -3,4 +3,7 @@ pandas==1.4.3
 Pillow==9.3.0
 streamlit==1.12.2
 streamlit_webrtc==0.44.0
+torch==1.12.1
 yolov5==6.2.2
+opencv-python-headless==4.6.0.66
+
