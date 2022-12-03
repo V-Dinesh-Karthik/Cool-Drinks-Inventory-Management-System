@@ -90,11 +90,11 @@ if option == 'Staff':
             image = Image.open(image)
             image = np.array(image)
 
-            model.conf = Threshold
-            model.iou = 0.45
-            model.agnostic = False
-            model.multi_label = False
-            model.max_det = 1000
+            model.conf = Threshold #probability of an event
+            model.iou = 0.45 #Intersection over union = area of overlap/ area of union > 0.5 considered "good"
+            # model.agnostic = False 
+            model.multi_label = False #stops multiple class detections per box
+            model.max_det = 1000 #maximum number of detections per image
 
             results = model(image)
 
