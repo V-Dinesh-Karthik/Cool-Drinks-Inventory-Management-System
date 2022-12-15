@@ -6,14 +6,44 @@ from PIL import Image
 import numpy as np
 import yolov5 as yl
 import torch
+import av
+import time
+
 
 # model = torch.hub.load('ultralytics/yolov5','custom','./models/best.pt')
-model = yl.load("./models/best.pt")
+@st.cache
+def model():
+    return yl.load("./models/best.pt")
+
+
+model = model()
 
 # rtc configuration !
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
+
+
+class VideoProcessor:
+    def __init__(self) -> None:
+        self.res = None
+        self.confidence = 0.5
+
+    def getRes(self):
+        return self.res
+
+    def recv(self, frame):
+        model.conf = self.confidence
+        img = frame.to_ndarray(format="bgr24")
+        flipped = img[:, ::-1, :]
+
+        im_pil = Image.fromarray(flipped)
+        results = model(im_pil, size=112)
+        self.res = results
+        b_img = np.array(results.render()[0])
+
+        return av.VideoFrame.from_ndarray(b_img, format="bgr24")
+
 
 st.title("Cold Drinks Inventory Management System")
 
@@ -41,12 +71,35 @@ if option == "Staff":
             mode=WebRtcMode.SENDRECV,
             rtc_configuration=RTC_CONFIGURATION,
             media_stream_constraints={"video": True, "audio": False},
+            video_processor_factory=VideoProcessor,
+            async_processing=True,
         )
-        if st.checkbox("Store"):
-            pass
 
-        if st.checkbox("Show the detected labels"):
-            pass
+        flag = 0
+
+        if st.checkbox("Store", value=False):
+            flag = 1
+
+        if st.checkbox("Show the detected labels", value=True):
+            empty = st.empty()
+            if ctx.state.playing:
+                while True:
+                    if ctx.video_processor:
+                        results = ctx.video_processor.getRes()
+                        if results != None:
+                            count = results.pandas().xyxy[0]
+                            dj = count["name"].tolist()
+                            dj = read_df(dj)
+
+                            empty.table(dj)
+                            for idx in dj.index:
+                                if flag:
+                                    Insert(date, dj["Name"][idx], dj["Count"][idx])
+                                    time.sleep(3)
+                        else:
+                            empty.write("No labels detected")
+                    else:
+                        break
 
     if media == "📊Data":
         st.title("📊Data")
@@ -104,11 +157,12 @@ if option == "Staff":
 
                 dd = read_df(dd)
 
-                dd.set_index("Name", inplace=True)
-
-                with out_image: 
-                    st.image("./Output/image0.jpg")
-
                 st.sidebar.subheader("Detected!")
                 st.sidebar.table(dd)
 
+                if st.button("Store"):
+                    for idx in dd.index:
+                        Insert(date, dd["Name"][idx], int(dd["Count"][idx]))
+
+                with out_image:
+                    st.image("./Output/image0.jpg")
