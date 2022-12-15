@@ -148,9 +148,11 @@ if option == "Staff":
             model.max_det = 1000  # maximum number of detections per image
 
             if st.button("Detect"):
-                results = model(image)
 
-                results.save(save_dir="./Output")
+                results = model(image)
+                box_img = np.array(results.render()[0])
+
+                # results.save(save_dir="./Output")
 
                 counted = results.pandas().xyxy[0]["name"].to_list()
                 dd = read_df(counted)
@@ -159,7 +161,7 @@ if option == "Staff":
                 st.sidebar.table(dd)
 
                 with out_image:
-                    st.image("./Output/image0.jpg")
+                    st.image(box_img)
 
                 if st.button("Store"):
                     for index, row in dd.iterrows():
