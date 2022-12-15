@@ -165,4 +165,4 @@ if option == "Staff":
 
                 if st.button("Store"):
                     for index, row in dd.iterrows():
-                        Insert(date=date, text=row["Name"], count=row["Count"])
+                        Insert(date=date, text=row["Name"], count=int(row["Count"]))
