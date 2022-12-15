@@ -92,9 +92,9 @@ if option == "Staff":
                             dj = read_df(dj)
 
                             empty.table(dj)
-                            for idx in dj.index:
+                            for idx,row in dj.iterrows():
                                 if flag:
-                                    Insert(date, dj["Name"][idx], dj["Count"][idx])
+                                    Insert(date, row["Name"], row["Count"])
                                     time.sleep(3)
                         else:
                             empty.write("No labels detected")
@@ -148,9 +148,9 @@ if option == "Staff":
             model.max_det = 1000  # maximum number of detections per image
 
             results = model(image)
-            box_img = np.array(results.render()[0])
+            # box_img = np.array(results.render()[0])
 
-                # results.save(save_dir="./Output")
+            results.save(save_dir="./Output")
 
             counted = results.pandas().xyxy[0]["name"].to_list()
             dd = read_df(counted)
@@ -159,7 +159,7 @@ if option == "Staff":
             st.sidebar.table(dd)
 
             with out_image:
-                st.image(box_img)
+                st.image("./Output/image0.jpg")
 
             if st.button("Store"):
                 for index, row in dd.iterrows():
