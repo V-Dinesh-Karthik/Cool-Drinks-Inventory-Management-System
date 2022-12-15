@@ -160,7 +160,9 @@ if option == "Staff":
 
                 if st.button("Store"):
                     for idx in dd.index:
-                        Insert(date, dd["Name"][idx] ,dd["Count"][idx])
+                        st.write(date)
+                        st.write(dd["Name"][idx])
+                        st.write(dd["Count"][idx])
 
                 with out_image:
                     st.image("./Output/image0.jpg")
