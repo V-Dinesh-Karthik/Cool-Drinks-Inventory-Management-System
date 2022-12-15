@@ -147,22 +147,19 @@ if option == "Staff":
             model.multi_label = False  # stops multiple class detections per box
             model.max_det = 1000  # maximum number of detections per image
 
-            dd = None
-            if st.button("Detect"):
-
-                results = model(image)
-                box_img = np.array(results.render()[0])
+            results = model(image)
+            box_img = np.array(results.render()[0])
 
                 # results.save(save_dir="./Output")
 
-                counted = results.pandas().xyxy[0]["name"].to_list()
-                dd = read_df(counted)
+            counted = results.pandas().xyxy[0]["name"].to_list()
+            dd = read_df(counted)
 
-                st.sidebar.subheader("Detected!")
-                st.sidebar.table(dd)
+            st.sidebar.subheader("Detected!")
+            st.sidebar.table(dd)
 
-                with out_image:
-                    st.image(box_img)
+            with out_image:
+                st.image(box_img)
 
             if st.button("Store"):
                 for index, row in dd.iterrows():
