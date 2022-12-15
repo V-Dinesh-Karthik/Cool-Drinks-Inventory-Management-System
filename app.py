@@ -158,9 +158,8 @@ if option == "Staff":
                 st.sidebar.subheader("Detected!")
                 st.sidebar.table(dd)
 
-                if st.checkbox("Store"):
-                    for idx in dd.index:
-                        Insert(date, dd["Name"][idx] ,dd["Count"][idx])
+                if st.button("Store"):
+                    dd.to_sql("ITEMS", con=conn, index=False)
 
                 with out_image:
                     st.image("./Output/image0.jpg")
