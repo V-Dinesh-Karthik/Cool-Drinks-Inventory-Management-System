@@ -163,4 +163,4 @@ if option == "Staff":
 
                 if(st.button("Store")):
                     for idx in dd.index:
-                        Insert(date,dd["Name"][idx],int(dd["Count"][idx]))
+                        Insert(date,dd["Name"][idx],dd["Count"][idx])
