@@ -152,17 +152,15 @@ if option == "Staff":
 
                 results.save(save_dir="./Output")
 
-                counted = results.pandas().xyxy[0]
-                dd = counted["name"].tolist()
-
-                dd = read_df(dd)
+                counted = results.pandas().xyxy[0]["name"].to_list()
+                dd = read_df(counted)
 
                 st.sidebar.subheader("Detected!")
                 st.sidebar.table(dd)
 
-                if st.button("Store"):
-                    for idx in dd.index:
-                        Insert(date, dd["Name"][idx], int(dd["Count"][idx]))
+                # if st.button("Store"):
+                #     for idx in dd.index:
+                #         Insert(date, idx, int(count[idx]))
 
                 with out_image:
                     st.image("./Output/image0.jpg")
