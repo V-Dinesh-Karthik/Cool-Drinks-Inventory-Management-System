@@ -158,8 +158,9 @@ if option == "Staff":
                 st.sidebar.subheader("Detected!")
                 st.sidebar.table(dd)
 
-                if st.button("Store"):
-                    dd.to_sql("ITEMS", con=conn, index=False)
-
                 with out_image:
                     st.image("./Output/image0.jpg")
+
+                if st.button("Store"):
+                    for idx in dd.index:
+                        Insert(date,dd["Name"][idx],int(dd["Count"][idx]))
