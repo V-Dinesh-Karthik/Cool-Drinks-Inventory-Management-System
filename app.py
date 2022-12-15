@@ -161,5 +161,6 @@ if option == "Staff":
                 with out_image:
                     st.image("./Output/image0.jpg")
 
-                if(st.button("Store")):
-                    dd.to_sql('ITEMS',con=conn,if_exists='append',index=False)
+                if st.button("Store"):
+                    for index, row in dd.iterrows():
+                        Insert(date=date, text=row["Name"], count=row["Count"])
