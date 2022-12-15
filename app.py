@@ -147,6 +147,7 @@ if option == "Staff":
             model.multi_label = False  # stops multiple class detections per box
             model.max_det = 1000  # maximum number of detections per image
 
+            dd = None
             if st.button("Detect"):
 
                 results = model(image)
@@ -163,6 +164,6 @@ if option == "Staff":
                 with out_image:
                     st.image(box_img)
 
-                if st.button("Store"):
-                    for index, row in dd.iterrows():
-                        Insert(date=date, text=row["Name"], count=int(row["Count"]))
+            if st.button("Store"):
+                for index, row in dd.iterrows():
+                    Insert(date=date, text=row["Name"], count=int(row["Count"]))
