@@ -94,7 +94,7 @@ if option == "Staff":
                             empty.table(dj)
                             for idx,row in dj.iterrows():
                                 if flag:
-                                    Insert(date, row["Name"], row["Count"])
+                                    Insert(date, row["Name"], int(row["Count"]))
                                     time.sleep(3)
                         else:
                             empty.write("No labels detected")
