@@ -1,36 +1,14 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, RTCConfiguration, WebRtcMode
-from sequel import *
-from io import BytesIO
+from controller.sequel import *
+from controller.userController import *
 from PIL import Image
 import numpy as np
 import yolov5 as yl
 import torch
 
-
-# st.set_page_config(page_title='Home') #ignore this
 # model = torch.hub.load('ultralytics/yolov5','custom','./models/best.pt')
 model = yl.load("./models/best.pt")
-
-
-def convert_cv2(df):  # function to convert dataframe into a csv
-    return df.to_csv().encode("utf-8")
-
-
-def convert_xcel(df):  # fuction to convert a dataframe into an excel file
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-        df.to_excel(writer)
-    return output
-
-
-def read_df(data):
-    d = {}
-    for key in data:
-        d[key] = d.get(key, 0) + 1
-    df = pd.DataFrame(d.items(), columns=["Name", "Count"])
-    return df
-
 
 # rtc configuration !
 RTC_CONFIGURATION = RTCConfiguration(
@@ -128,8 +106,9 @@ if option == "Staff":
 
                 dd.set_index("Name", inplace=True)
 
-                with out_image:
+                with out_image: 
                     st.image("./Output/image0.jpg")
 
                 st.sidebar.subheader("Detected!")
                 st.sidebar.table(dd)
+
