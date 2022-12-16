@@ -13,7 +13,7 @@ import time
 # model = torch.hub.load('ultralytics/yolov5','custom','./models/best.pt')
 @st.cache
 def model():
-    return yl.load("./models/best.pt")
+    return yl.load("./models/model.pt")
 
 
 model = model()
